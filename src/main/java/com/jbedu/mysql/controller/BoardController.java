@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jbedu.mysql.command.BCommand;
+import com.jbedu.mysql.command.BDeleteCommand;
 import com.jbedu.mysql.command.BListCommand;
 import com.jbedu.mysql.command.BWriteCommand;
 import com.jbedu.mysql.dao.BoardDao;
@@ -71,8 +72,12 @@ public class BoardController {
 		
 		// command 에서 해야 하나 그냥 해보자
 		
-		BoardDao boardDao = new BoardDao();
-		int deleteFlag = boardDao.boardDelete(bnum); // 성공 1, 실패 0
+//		BoardDao boardDao = new BoardDao();
+//		int deleteFlag = boardDao.boardDelete(bnum); // 성공 1, 실패 0
+		
+		model.addAttribute("request", request);
+		command = new BDeleteCommand();
+		int deleteFlag = command.execute(model);
 		
 		if (deleteFlag != 1) {  // 존재하지 않는 글번호 삭제 실패
 			
