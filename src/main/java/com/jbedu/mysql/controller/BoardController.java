@@ -9,11 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jbedu.mysql.command.BCommand;
+import com.jbedu.mysql.command.BListCommand;
+import com.jbedu.mysql.command.BWriteCommand;
 import com.jbedu.mysql.dao.BoardDao;
 import com.jbedu.mysql.dto.BoardDto;
 
 @Controller
 public class BoardController {
+	
+	BCommand command = null;
 	
 	@RequestMapping(value = "/write_form")
 	public String write_form() {
@@ -23,14 +28,18 @@ public class BoardController {
 	@RequestMapping(value = "/writeOk")
 	public String writeOk(HttpServletRequest request, Model model) {
 		
-		String bname = request.getParameter("bname");
-		String btitle = request.getParameter("btitle");
-		String bcontent = request.getParameter("bcontent");
+//		String bname = request.getParameter("bname");
+//		String btitle = request.getParameter("btitle");
+//		String bcontent = request.getParameter("bcontent");
+//		
+//		// command 에서 해야 하나 그냥 해보자
+//		
+//		BoardDao boardDao = new BoardDao();
+//		boardDao.boardWrite(bname, btitle, bcontent);
+		model.addAttribute("request", request);
 		
-		// command 에서 해야 하나 그냥 해보자
-		
-		BoardDao boardDao = new BoardDao();
-		boardDao.boardWrite(bname, btitle, bcontent);
+		command = new BWriteCommand();
+		command.execute(model);	
 		
 		return "redirect:boardList";  // 글이 작성되고 난후 모든 글의 리스트를 보여주는 요청을 새로 보내주어야 함. redirect
 	}
@@ -38,10 +47,14 @@ public class BoardController {
 	@RequestMapping(value = "/boardList")
 	public String boardList(HttpServletRequest request, Model model) {
 		
-		BoardDao boardDao = new BoardDao();
-		ArrayList<BoardDto> bDtos = boardDao.boardList();
+//		BoardDao boardDao = new BoardDao();
+//		ArrayList<BoardDto> bDtos = boardDao.boardList();
+//		
+//		model.addAttribute("bDtos", bDtos);
+//		
+		command = new BListCommand();
+		command.execute(model);
 		
-		model.addAttribute("bDtos", bDtos);
 		
 		return "boardList";
 	}
